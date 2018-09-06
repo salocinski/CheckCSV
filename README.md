@@ -6,11 +6,12 @@ recompiler pour que l'information soit correcte /!\
 
 Cette application permet de lancer un script SQL personnalisé via un fichier .csv.
 
-Dans la v1.0, l'application est capable de parser un fichier .csv pour en ressortir des informations personnalisées.
+L'application est capable de parser un fichier modèle .csv pour en ressortir des informations personnalisées.
 
-Un modèle de fichier .csv pour la création d'une base de donnée et disponible sur le dépot. Le respect de la structure de ce fichier
-d'exemple permet à l'application de parcourir le fichier et mettre en correspondance les intitulés de colonnes et les variables insérées
-dans la requete SQL. S'il y a correspondance, la requete SQL sera personnalisée selon les informations indiquées sous chaque intitulé de
-colonnes.
+Un modèle (disponible sur le dépot) est défini pour la création d'une base de donnée. 
+
+Un second modèle (disponible sur le dépot) est défini pour la création d'une table avec un champ. (travail en cours pour la création avec plusieurs champs).
+
+Le respect de la structure des fichiers d'exemple permet à l'application de parcourir le fichier et mettre en correspondance les intitulés de colonnes et les variables insérées dans les requetes SQL. S'il y a correspondance, les requetes SQL seront personnalisées selon les informations indiquées sous chaque intitulé de colonnes.
 
 Je reste à disposition pour toute idées d'améliorations.
