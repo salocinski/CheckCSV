@@ -1,0 +1,3 @@
+nomTable;nomChamp;typeChamp;tailleChamp;autoIncrement;notNull;clePrimaire;moteurStockage
+testTable;testChamp;char;10;non;non;non;InnoDB
+testTable;secondChamp;varchar;25;non;non;non;InnoDB
