@@ -107,7 +107,7 @@ public class Connexion
 			catch (SQLException ex)
 			{
 				System.out.println("Problème d'informations liées à  la BDD");
-				JOptionPane.showMessageDialog(null, "La base de donnée n'existe pas. \n Cliquez sur 'OK' pour l'auto générer.", "Création de la BDD", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "La base de donnée n'existe pas. \n Veuillez vérifier les informations saisies.", "Création de la BDD", JOptionPane.INFORMATION_MESSAGE);
 				
 				try
 				{
@@ -240,5 +240,113 @@ public class Connexion
 		}
 		else
 			System.out.println("Erreur de création.");
+	}
+
+	public static Connection getConnexion(File scriptTemp, String nomBdd)
+	{
+		if (LA_CONNEXION == null)
+		{
+			//------------------------- CHARGEMENT DU DRIVER -------------------------//
+			try
+			{
+				System.out.println("Chargement du driver...");
+				Class.forName(DRIVER).newInstance();
+				System.out.println("Driver OK...");
+			}
+			catch (ClassNotFoundException ex)
+			{
+				System.out.println("Problème de driver");
+			}
+			catch (InstantiationException | IllegalAccessException ex)
+			{
+				Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
+			}
+			//------------------------- CHARGEMENT DU DRIVER -------------------------//
+			
+			//------------------------- CONNEXION A LA BDD -------------------------//
+			try
+			{
+				System.out.println("Connexion a la BDD...");
+				String bddTemp = "jdbc:mysql://localhost:3306/"+nomBdd;
+				LA_CONNEXION = DriverManager.getConnection(bddTemp, LOGIN, MDP);
+				System.out.println("Connexion OK...");
+				
+				String scriptSQL = null;
+				try
+				{
+					scriptSQL = FileHelper.lire(scriptTemp, Charset.defaultCharset());
+				}
+				catch (IOException e) {e.printStackTrace();}
+				Connexion.creerTable(scriptSQL);
+				LA_CONNEXION = null;
+			}
+			catch (SQLException ex)
+			{
+				System.out.println("Problème d'informations liées à  la BDD");
+				JOptionPane.showMessageDialog(null, "La base de donnée n'existe pas. \n Cliquez sur 'OK' pour l'auto générer.", "Création de la BDD", JOptionPane.INFORMATION_MESSAGE);
+				
+				try
+				{
+					//------------------------- CREATION AUTO BDD -------------------------//
+					
+						//------------------------- CONNEXION / DECONNEXION BDD PAR DEFAUT -------------------------//
+					String bddTemp = "jdbc:mysql://localhost:3306/"+nomBdd;
+					LA_CONNEXION = DriverManager.getConnection(bddTemp, LOGIN, MDP);
+					
+					String scriptSQL = null;
+					try
+					{
+						scriptSQL = FileHelper.lire(scriptTemp, Charset.defaultCharset());
+					}
+					catch (IOException e) {e.printStackTrace();}
+					Connexion.creerTable(scriptSQL);
+					LA_CONNEXION = null;
+						//------------------------- CONNEXION / DECONNEXION BDD PAR DEFAUT -------------------------//
+						
+						//------------------------- CONNEXION BDD APPLICATION -------------------------//
+					LA_CONNEXION = DriverManager.getConnection(bddTemp, LOGIN, MDP);
+						//------------------------- CONNEXION BDD APPLICATION -------------------------//
+						
+					//------------------------- CREATION AUTO BDD -------------------------//
+				}
+				catch (SQLException ex1)
+				{
+					Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex1);
+				}
+			}
+			//------------------------- CONNEXION A LA BDD -------------------------//
+		}
+		return LA_CONNEXION;		
+	}
+	
+	public static void creerTable(String scriptSql)
+	{
+		Statement transmission = null;
+
+		try 
+		{
+			transmission = LA_CONNEXION.createStatement();
+		}
+		catch (SQLException ex)
+		{
+			Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		int resultat = 0;
+
+		try
+		{
+			resultat = transmission.executeUpdate(scriptSql);
+			if(resultat != 1)
+			{
+				JOptionPane.showMessageDialog(null, "La table a bien été créée.", "Confirmation de création", JOptionPane.INFORMATION_MESSAGE);
+				System.out.println("La table à été créée.");
+			}
+		}
+		catch (SQLException ex)
+		{
+			JOptionPane.showMessageDialog(null, "La table existe déjà dans la base de données.", "Erreur de création", JOptionPane.ERROR_MESSAGE);
+			System.out.println("Erreur de création, la "+ex.getMessage());
+		}
 	}
 }

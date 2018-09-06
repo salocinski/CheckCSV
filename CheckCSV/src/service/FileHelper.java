@@ -16,34 +16,6 @@ import java.util.zip.ZipFile;
  
 public class FileHelper
 {
-//	private static final int TAILLE_BUFFER = 2048;
-// 
-//	public static String lireFichier(String adresse)
-//	{
-//		StringBuilder fileContent = new StringBuilder();
-//		try
-//		{
-//			InputStreamReader fichier = new InputStreamReader(new FileInputStream(adresse), "utf8");		
-//			int nbCharRead = TAILLE_BUFFER;
-//			
-//			while (TAILLE_BUFFER == nbCharRead)
-//			{
-//				char[] buffer = new char[TAILLE_BUFFER];
-//				nbCharRead = fichier.read(buffer);
-//				
-//				if(nbCharRead>0)
-//					fileContent.append(buffer, 0, nbCharRead);
-//			}
-//			fichier.close();
-//		}
-//		catch (Exception e)
-//		{
-//			e.printStackTrace(System.err);
-//		}
-//		
-//		return fileContent.toString();
-//	}
-	
 	/**
 	* Lit un fichier texte depuis un flux d'octets entrant
 	*/

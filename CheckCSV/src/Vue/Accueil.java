@@ -30,7 +30,7 @@ public class Accueil extends JFrame
 		//Déclaration des élements de la Frame
 		JLabel titre = new JLabel("Parseur de fichier CSV");
 		JButton boutonBdd = new JButton("Créer une Bdd depuis un .CSV");
-//		JButton boutonTable = new JButton("Créer une Table depuis un .CSV");
+		JButton boutonTable = new JButton("Créer une Table depuis un .CSV");
 		
 		JLabel signature = new JLabel("Développé par Nicolas STRYJEWSKI");
 		
@@ -52,7 +52,7 @@ public class Accueil extends JFrame
 		
 		//Ajout des éléments au panel BOUTON
 		panelBouton.add(boutonBdd);
-//		panelBouton.add(boutonTable);
+		panelBouton.add(boutonTable);
 		panelBouton.add(quitter);
 		
 		//Définition du panel SIGNATURE et configuration de ses éléments
@@ -84,16 +84,16 @@ public class Accueil extends JFrame
 			}
 		});
 
-//		boutonTable.addActionListener(new ActionListener()
-//		{
-//			@Override
-//			public void actionPerformed(ActionEvent action)
-//			{
-//				CreerTable createurtable = new CreerTable();
-//				createurtable.setVisible(true);
-//				main.dispose();
-//			}
-//		});
+		boutonTable.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent action)
+			{
+				CreerTable createurtable = new CreerTable();
+				createurtable.setVisible(true);
+				main.dispose();
+			}
+		});
 		
 		quitter.addActionListener(new ActionListener()
 		{

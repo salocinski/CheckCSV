@@ -1,12 +1,16 @@
 package Vue;
 
 import java.awt.BorderLayout;
+import java.util.Hashtable;
+
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import controleur.BddManager;
+import controleur.CsvManager;
+import service.MyFileChooser;
 
 public class CreerBdd extends JFrame
 {	
@@ -19,36 +23,31 @@ public class CreerBdd extends JFrame
 		//Init de la frame
 		this.setSize(L_FENETRE, H_FENETRE);
 		this.setTitle(TITRE);
-		JFileChooser selectionFichier = new JFileChooser();
+		MyFileChooser selectionFichier = new MyFileChooser();
 		
 		//Filtre de sélection de fichier uniquement sur le JFileChooser
 		selectionFichier.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		
 		//Activation du JFileChooser
-		int valider=selectionFichier.showOpenDialog(getParent());
+		int option = selectionFichier.getOption();
 		
-		if(valider==JFileChooser.APPROVE_OPTION)
-		{		
-			//Récupération du nom de fichier complet
-			String nomFichierComplet = selectionFichier.getSelectedFile().getName();
-			
-			//Découpage du nom de fichier pour définir son extension
-			String extensionFichier = nomFichierComplet.substring(nomFichierComplet.lastIndexOf("."));
-			
-			//Mise sous condition du fichier sélectionné selon son type MIME
-			//Si la condition n'est pas respectée, on affiche un pop-up d'erreur, on ferme la fenetre précédente de sélection
-			//on ouvre une nouvelle fenetre de selection pour relancer les configurations du JFileChooser
-			if(!extensionFichier.equals(".csv"))
+		if(option == JFileChooser.APPROVE_OPTION)
+		{
+			if(selectionFichier.verifTypeMime())
 			{
-				JOptionPane.showMessageDialog(null, "Le type MIME du fichier séléctionné n'est pas compatible.", "Erreur de compatibilité", JOptionPane.ERROR_MESSAGE);
-//				CreerBdd selection = new CreerBdd();
-//				selection.setVisible(true);
+				//On utilisera la variable bdd pour inserer le script SQL
+				BddManager bdd = new BddManager();
+				//L'objet csv est crée pour permettre d'extraire les données du fichier csv
+				CsvManager csv = new CsvManager();
+				Hashtable<String, String> association =	csv.extraireDonneesBddCSV(selectionFichier);
+				bdd.insererScript(association);
 				this.dispose();
 			}
 			else
 			{
-				BddManager bdd = new BddManager();
-				bdd.verifCsv(selectionFichier);
+				JOptionPane.showMessageDialog(null, "Le type MIME du fichier séléctionné n'est pas compatible.", "Erreur de compatibilité", JOptionPane.ERROR_MESSAGE);
+				CreerBdd selection = new CreerBdd();
+				selection.setVisible(true);
 				this.dispose();
 			}
 		}
